@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "water":      { "minzoom": 0,  "maxzoom": 14 },
+    "landuse":    { "minzoom": 8,  "maxzoom": 14 },
+    "roads":      { "minzoom": 8,  "maxzoom": 14 },
+    "boundaries": { "minzoom": 4,  "maxzoom": 14 },
+    "places":     { "minzoom": 4,  "maxzoom": 14 }
+  },
+  "settings": {
+    "minzoom": 0,
+    "maxzoom": 14,
+    "basezoom": 14,
+    "include_ids": false,
+    "compress": "gzip",
+    "name": "Cuba",
+    "version": "1.0",
+    "description": "Minimal Cuba basemap for the geocoder"
+  }
+}

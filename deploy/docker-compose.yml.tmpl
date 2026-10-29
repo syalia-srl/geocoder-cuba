@@ -1,0 +1,26 @@
+# Rendered by deploy/install.sh on the target. One service, no volumes.
+#
+# No volumes because the geocoder is stateless: it answers from a read-only
+# baked database and writes nothing a user would miss. Update = load a newer
+# image and re-run install.sh; there is nothing to preserve and nothing a bad
+# update can eat.
+#
+# Ordinary port mapping, NOT network_mode: host — the geocoder reaches no
+# service on the target (no LLM, no external API), so it has no reason to share
+# the host's network namespace.
+services:
+  geocoder:
+    image: geocoder:${TAG}
+    container_name: geocoder
+    ports:
+      - "${PORT}:8000"
+    restart: unless-stopped
+    # start_period covers the ~90 s warm-up on full-Cuba data (routing graph +
+    # edge index are built at startup). Without it Docker would mark a healthy
+    # container unhealthy while it is still legitimately warming.
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 180s

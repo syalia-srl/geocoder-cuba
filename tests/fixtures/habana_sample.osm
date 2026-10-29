@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6">
+  <!-- Polygon nodes for municipio boundary (closed ring around Vedado area) -->
+  <node id="1001" lat="23.150" lon="-82.400"/>
+  <node id="1002" lat="23.150" lon="-82.360"/>
+  <node id="1003" lat="23.130" lon="-82.360"/>
+  <node id="1004" lat="23.130" lon="-82.400"/>
+  <!-- Street nodes for Calle 23 -->
+  <node id="2001" lat="23.140" lon="-82.390"/>
+  <node id="2002" lat="23.140" lon="-82.370"/>
+  <!-- Portal node: addr:housenumber + addr:street -->
+  <node id="3001" lat="23.141" lon="-82.385">
+    <tag k="addr:housenumber" v="415"/>
+    <tag k="addr:street" v="Calle 23"/>
+  </node>
+  <!-- POI node: Hotel Nacional -->
+  <node id="4001" lat="23.138" lon="-82.382">
+    <tag k="tourism" v="hotel"/>
+    <tag k="name" v="Hotel Nacional"/>
+  </node>
+  <!-- Barrio polygon nodes (encloses Hotel Nacional at 23.138,-82.382) -->
+  <node id="7001" lat="23.145" lon="-82.395"/>
+  <node id="7002" lat="23.145" lon="-82.375"/>
+  <node id="7003" lat="23.135" lon="-82.375"/>
+  <node id="7004" lat="23.135" lon="-82.395"/>
+  <!-- Municipio boundary way (closed ring, no tags so handler caches it) -->
+  <way id="5001">
+    <nd ref="1001"/>
+    <nd ref="1002"/>
+    <nd ref="1003"/>
+    <nd ref="1004"/>
+    <nd ref="1001"/>
+  </way>
+  <!-- Street way: Calle 23 -->
+  <way id="5002">
+    <tag k="highway" v="residential"/>
+    <tag k="name" v="Calle 23"/>
+    <tag k="alt_name" v="La Rampa"/>
+    <nd ref="2001"/>
+    <nd ref="2002"/>
+  </way>
+  <!-- Street whose colloquial name lives in parentheses (Cuban OSM pattern) -->
+  <way id="5003">
+    <tag k="highway" v="secondary"/>
+    <tag k="name" v="Avenida de Italia (Galiano)"/>
+    <nd ref="2001"/>
+    <nd ref="2002"/>
+  </way>
+  <!-- Barrio way (closed ring): place=neighbourhood -->
+  <way id="8001">
+    <tag k="place" v="neighbourhood"/>
+    <tag k="name" v="Vedado"/>
+    <nd ref="7001"/>
+    <nd ref="7002"/>
+    <nd ref="7003"/>
+    <nd ref="7004"/>
+    <nd ref="7001"/>
+  </way>
+  <!-- Municipio relation -->
+  <relation id="6001">
+    <tag k="boundary" v="administrative"/>
+    <tag k="admin_level" v="6"/>
+    <tag k="name" v="Plaza de la Revolución"/>
+    <member type="way" ref="5001" role="outer"/>
+  </relation>
+</osm>

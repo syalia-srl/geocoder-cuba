@@ -1,0 +1,19 @@
+# Keep the build context small. The airgap image bakes exactly one database and
+# one tile archive; every other artifact in data/ is hundreds of MB of context
+# that would be uploaded to the daemon and then discarded.
+.git/
+.venv/
+.playground/
+__pycache__/
+**/__pycache__/
+*.pyc
+dist/
+data/*
+!data/cuba_routing_full.db
+!data/tiles
+data/tiles/*
+!data/tiles/cuba.pmtiles
+# WAL sidecars must never ship: the payload is checkpointed by
+# deploy/bake-data.sh, and a stale -wal alongside it would shadow the real data.
+*.db-wal
+*.db-shm

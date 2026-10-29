@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geocoder-cuba"
+version = "0.5.0"
+description = "Geocodificador offline para Cuba basado en OpenStreetMap"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "osmium>=4.3.0",
+    "shapely>=2.0.0",
+    "rapidfuzz>=3.5.0",
+    "beaver-db>=2.1.0",
+    "typer>=0.12.0",
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.100.0", "uvicorn>=0.23.0"]
+dev = ["pytest>=7.0.0", "pytest-benchmark>=4.0.0", "ruff>=0.1.0", "httpx>=0.27.0"]
+
+[project.scripts]
+geocoder = "geocoder.cli.main:cli"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+# `api/static/*` matches only the top level — it silently dropped the entire
+# vendored tree (maplibre, pmtiles.js, fonts, SDF glyphs) from installed
+# packages, so the offline map rendered blank anywhere the package was pip
+# installed rather than run from a checkout. tests/test_packaging.py guards it.
+geocoder = ["search/aliases.json", "api/static/**/*"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# benchmarks are opt-in: they need a real built DB + pytest-benchmark.
+# Run them explicitly with `uv run pytest tests/benchmarks`.
+addopts = "--ignore=tests/benchmarks"
+filterwarnings = [
+    # beaver's aiosqlite calls get_event_loop() on its reactor thread
+    "ignore:There is no current event loop:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

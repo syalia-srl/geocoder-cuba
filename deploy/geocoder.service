@@ -1,0 +1,18 @@
+[Unit]
+Description=Cuba Geocoder API (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/geocoder
+Environment=GEOCODER_DB_PATH=/srv/geocoder/data/cuba_geo.db
+ExecStart=/srv/geocoder/.venv/bin/uvicorn geocoder.api.main:app --host 127.0.0.1 --port 8034
+Restart=on-failure
+RestartSec=2
+MemoryMax=2G
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=geocoder
+
+[Install]
+WantedBy=multi-user.target

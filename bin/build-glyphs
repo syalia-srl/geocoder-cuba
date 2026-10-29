@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Build the offline MapLibre SDF glyph ranges used by the map's place labels.
+# One-off: the generated .pbf files are committed, so this only reruns when the
+# font or the range set changes. Needs node + network (for fontnik and Inter).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+FONTSTACK="Inter Medium"
+OUT="src/geocoder/api/static/vendor/glyphs/$FONTSTACK"
+TTF="${1:-data/fonts/Inter-Medium.ttf}"
+WORK="${TMPDIR:-/tmp}/geocoder-glyphs"
+
+if [[ ! -f "$TTF" ]]; then
+  echo "fetching Inter 4.1 -> $TTF"
+  mkdir -p "$(dirname "$TTF")" "$WORK"
+  curl -sfL -o "$WORK/inter.zip" \
+    https://github.com/rsms/inter/releases/download/v4.1/Inter-4.1.zip
+  unzip -p "$WORK/inter.zip" extras/ttf/Inter-Medium.ttf > "$TTF"
+fi
+
+mkdir -p "$WORK"
+(cd "$WORK" && npm install --silent --no-save fontnik@0.7.7)
+
+echo "fontnik: $TTF -> $OUT"
+NODE_PATH="$WORK/node_modules" node deploy/glyphs/build-glyphs.mjs "$TTF" "$OUT"

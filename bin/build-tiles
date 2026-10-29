@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Build the offline Cuba vector basemap (PMTiles) from the OSM PBF with tilemaker.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+PBF="${1:-data/cuba-latest.osm.pbf}"
+OUT="data/tiles/cuba.pmtiles"
+mkdir -p data/tiles
+echo "tilemaker: $PBF -> $OUT"
+tilemaker --input "$PBF" --output "$OUT" \
+  --config deploy/tiles/config.json --process deploy/tiles/process.lua
+ls -lh "$OUT"

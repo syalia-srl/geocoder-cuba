@@ -1,0 +1,7 @@
+{
+  "_note": "Curated aliases for ambiguous/colloquial/historical Cuban place names. alias_norm -> {canonical, level}. The canonical must exist in the gazetteer at that level; the alias then points to the same record(s). Redundant aliases (where the alias already normalizes to the canonical) are unnecessary.",
+  "habana": {"canonical": "La Habana", "level": "provincia"},
+  "ciudad de la habana": {"canonical": "La Habana", "level": "provincia"},
+  "10 de octubre": {"canonical": "Diez de Octubre", "level": "municipio"},
+  "isla de pinos": {"canonical": "Isla de la Juventud", "level": "provincia"}
+}

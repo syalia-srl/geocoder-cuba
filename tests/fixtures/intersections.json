@@ -1,0 +1,26 @@
+{
+  "_note": "Real Cuban street intersections and 'entre' stretches, with expected coordinates (WGS84) and a tolerance. Anchors: 23 y L is Coppelia's corner in Vedado (externally verified, ~23.143,-82.381). The rest are the true street crossings in OSM. Separator variations (y / esq / esq. a / slash / e/) must all land on the same corner. Run against a full-Cuba build; skips when absent.",
+  "tolerance_m": 300,
+  "cases": [
+    {"query": "23 y L", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "L y 23", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "Calle 23 esquina L", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "23 esq. a L", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "23 esq L", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "23/L", "lat": 23.1396, "lon": -82.3834, "precision": ["esquina"]},
+    {"query": "Calle 23 y 12", "lat": 23.1272, "lon": -82.3996, "precision": ["esquina"]},
+    {"query": "12 y 23, Vedado", "lat": 23.1272, "lon": -82.3996, "precision": ["esquina"]},
+    {"query": "134 y 71", "lat": 23.0659, "lon": -82.4335, "precision": ["esquina"]},
+    {"query": "134 esquina 71", "lat": 23.0659, "lon": -82.4335, "precision": ["esquina"]},
+    {"query": "Ave 51 y 134", "lat": 23.0711, "lon": -82.4353, "precision": ["esquina"]},
+    {"query": "Neptuno y San Rafael", "lat": 23.1379, "lon": -82.3583, "precision": ["esquina"]},
+    {"query": "Infanta y San Lázaro", "lat": 23.1382, "lon": -82.3784, "precision": ["esquina"]},
+    {"query": "Galiano y San Rafael", "lat": 23.1365, "lon": -82.3633, "precision": ["esquina"]},
+    {"query": "Reina y Belascoaín", "lat": 23.1320, "lon": -82.3697, "precision": ["esquina"]},
+    {"query": "Zanja y Belascoaín", "lat": 23.1348, "lon": -82.3700, "precision": ["esquina"]},
+    {"query": "Calle 23 e/ L y M", "lat": 23.1396, "lon": -82.3834, "precision": ["segment_midpoint", "esquina"]},
+    {"query": "23 e/ L y M, Vedado", "lat": 23.1396, "lon": -82.3834, "precision": ["segment_midpoint", "esquina"]},
+    {"query": "L e/ 23 y 25, Vedado", "lat": 23.1392, "lon": -82.3830, "precision": ["segment_midpoint"]},
+    {"query": "Calle L e/ 23 y 25", "lat": 23.1392, "lon": -82.3830, "precision": ["segment_midpoint"]}
+  ]
+}

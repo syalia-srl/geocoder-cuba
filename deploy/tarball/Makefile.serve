@@ -1,0 +1,15 @@
+# Baked into the geocoder tarball. Run on the air-gapped VM: `make serve`.
+# `-include`, not `include`: the tarball no longer ships `.env` (it would clobber
+# the operator's config when the package is extracted over an existing install),
+# so on a clean install it does not exist yet. The guard below gives the useful
+# message; a plain `include` would abort first with an opaque one.
+-include .env
+export
+
+serve:
+	@test -f .env || { echo "ERROR: falta ./.env — cópialo de la plantilla y edítalo:  cp env.example .env" >&2; exit 1; }
+	@test -f "$(GEOCODER_DB_PATH)" || { echo "ERROR: falta la base de datos $(GEOCODER_DB_PATH)"; exit 1; }
+	.venv/bin/uvicorn geocoder.api.main:app --host 127.0.0.1 --port $(GEOCODER_PORT)
+
+health:
+	@curl -fsS http://127.0.0.1:$(GEOCODER_PORT)/health && echo " ok"

@@ -1,0 +1,154 @@
+{
+  "test_cases": [
+    {
+      "query": "Calle 23 No 415",
+      "expected": {
+        "tipo": "portal",
+        "municipio": "Plaza de la Revolución",
+        "barrio": "Vedado",
+        "lat_approx": 23.13,
+        "lon_approx": -82.38
+      }
+    },
+    {
+      "query": "23 y 12",
+      "expected": {
+        "tipo": "interseccion",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Hotel Nacional",
+      "expected": {
+        "tipo": "poi",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Calle 23",
+      "expected": {
+        "tipo": "calle",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "municipio:Plaza Calle 23",
+      "expected": {
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "barrio:Vedado hotel",
+      "expected": {
+        "barrio": "Vedado"
+      }
+    },
+    {
+      "query": "Avenida de los Presidentes 100",
+      "expected": {
+        "tipo": "portal",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Paseo 200",
+      "expected": {
+        "tipo": "portal",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Calle 100 y 5ta",
+      "expected": {
+        "tipo": "interseccion"
+      }
+    },
+    {
+      "query": "Plaza de la Revolución",
+      "expected": {
+        "tipo": "poi",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Calle G 23",
+      "expected": {
+        "tipo": "calle",
+        "municipio": "Plaza de la Revolución"
+      }
+    },
+    {
+      "query": "Vedado",
+      "expected": {
+        "municipio": "Plaza de la Revolución",
+        "barrio": "Vedado"
+      }
+    },
+    {
+      "query": "Cerro",
+      "expected": {
+        "municipio": "Cerro"
+      }
+    },
+    {
+      "query": "Habana Vieja",
+      "expected": {
+        "municipio": "Habana Vieja"
+      }
+    },
+    {
+      "query": "Marianao",
+      "expected": {
+        "municipio": "Marianao"
+      }
+    },
+    {
+      "query": "Regla",
+      "expected": {
+        "municipio": "Regla"
+      }
+    },
+    {
+      "query": "Guanabacoa",
+      "expected": {
+        "municipio": "Guanabacoa"
+      }
+    },
+    {
+      "query": "San Miguel del Padrón",
+      "expected": {
+        "municipio": "San Miguel del Padrón"
+      }
+    },
+    {
+      "query": "La Lisa",
+      "expected": {
+        "municipio": "La Lisa"
+      }
+    },
+    {
+      "query": "Boyeros",
+      "expected": {
+        "municipio": "Boyeros"
+      }
+    },
+    {
+      "query": "Arroyo Naranjo",
+      "expected": {
+        "municipio": "Arroyo Naranjo"
+      }
+    },
+    {
+      "query": "Cotorro",
+      "expected": {
+        "municipio": "Cotorro"
+      }
+    },
+    {
+      "query": "Diez de Octubre",
+      "expected": {
+        "municipio": "Diez de Octubre"
+      }
+    }
+  ]
+}

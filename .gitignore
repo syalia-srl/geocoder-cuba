@@ -1,0 +1,52 @@
+# Data files (large, generated)
+data/*.osm.pbf
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/versions/
+data/metadata.json
+data/tiles/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Docker
+.docker/
+
+# Local config
+.env
+.env.local
+data/fonts/
+
+# Airgap bundle output (260 MB) — rebuild with deploy/build-airgapped.sh
+geocoder-docker.tar.gz
+geocoder-*.tar.gz

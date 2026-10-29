@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Geocodificador · Cuba</title>
+<meta name="description" content="Escribe una dirección cubana y obtén el punto en el mapa, con su radio de precisión honesto." />
+<link rel="stylesheet" href="/static/vendor/fonts/fonts.css" />
+<link rel="stylesheet" href="/static/vendor/maplibre/maplibre-gl.css" />
+<link rel="stylesheet" href="/static/style.css?v=13" />
+</head>
+<body>
+<div id="map" aria-hidden="true"></div>
+
+<main class="console" id="console">
+  <header class="brand">
+    <span class="brand__mark" aria-hidden="true"></span>
+    <span class="brand__word">Geocodificador</span>
+    <span class="brand__country">Cuba</span>
+  </header>
+
+  <h1 class="lede">Escribe la dirección.<br />Ponemos el punto —<br />y te decimos con cuánta certeza.</h1>
+
+  <div class="mode" id="mode" role="tablist" aria-label="Modo de búsqueda">
+    <button type="button" class="mode__btn mode__btn--on" data-mode="point">Punto</button>
+    <button type="button" class="mode__btn" data-mode="region">Región</button>
+    <button type="button" class="mode__btn" data-mode="ruta">Ruta</button>
+    <button type="button" class="mode__btn" data-mode="viaje">Viaje</button>
+    <button type="button" class="mode__btn" data-mode="lote">Lote</button>
+  </div>
+
+  <form class="search" id="search" autocomplete="off">
+    <label class="sr-only" for="q">Dirección, lugar o barrio</label>
+    <input id="q" name="q" type="text" placeholder="Calle 23 e/ L y M, Vedado" spellcheck="false" />
+    <input id="streets" type="text" placeholder="23, Línea, Paseo, G" spellcheck="false" hidden />
+    <input id="ruta-from" type="text" placeholder="Origen — Hotel Nacional" spellcheck="false" hidden />
+    <input id="ruta-to" type="text" placeholder="Destino — El Capitolio, Habana Vieja" spellcheck="false" hidden />
+    <button type="submit" id="go" aria-label="Resolver">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+
+  <ul class="examples" id="examples" aria-label="Ejemplos">
+    <li><button type="button">Calle L e/ 23 y 25, Vedado</button></li>
+    <li><button type="button">23 esq. a L, Vedado</button></li>
+    <li><button type="button">Hotel Nacional</button></li>
+    <li><button type="button">Plaza de la Revolución</button></li>
+    <li><button type="button">Coppelia, Vedado</button></li>
+  </ul>
+
+  <ul class="candidates" id="candidates" hidden aria-label="Resultados"></ul>
+
+  <section class="result" id="result" hidden aria-live="polite">
+    <div class="result__head">
+      <p class="result__name" id="r-name">—</p>
+      <span class="result__type" id="r-type"></span>
+    </div>
+    <p class="result__place" id="r-place"></p>
+
+    <div class="parse" id="r-parse" aria-label="Interpretación"></div>
+
+    <dl class="readout">
+      <div>
+        <dt>Coordenadas</dt>
+        <dd class="mono" id="r-coords">—</dd>
+      </div>
+      <div>
+        <dt>Precisión</dt>
+        <dd class="mono" id="r-radius">—</dd>
+      </div>
+      <div>
+        <dt>Método</dt>
+        <dd class="mono" id="r-method">—</dd>
+      </div>
+    </dl>
+
+    <div class="trip__actions iso">
+      <button type="button" id="iso-go">¿Hasta dónde llego? · 5 · 10 · 15 min</button>
+    </div>
+    <ul class="iso__bands" id="iso-bands" hidden></ul>
+
+    <ul class="nearby" id="nearby" hidden aria-label="Lugares cercanos"></ul>
+  </section>
+
+  <section class="trip" id="trip" hidden>
+    <p class="trip__lead">Haz clic en el mapa para ir agregando paradas. La primera es el origen.</p>
+    <ol class="stops" id="stops"></ol>
+    <label class="trip__back"><input type="checkbox" id="trip-return" /> Volver al inicio</label>
+    <div class="trip__actions">
+      <button type="button" id="trip-go" disabled>Optimizar</button>
+      <button type="button" id="trip-clear">Limpiar</button>
+    </div>
+    <p class="trip__total mono" id="trip-total"></p>
+  </section>
+
+  <section class="trip lote" id="lote" hidden>
+    <p class="trip__lead">Sube un Excel o CSV con una columna de direcciones. Se lee en tu navegador; solo las direcciones van al servidor.</p>
+    <label class="lote__drop">
+      <input type="file" id="lote-file" class="sr-only" accept=".xlsx,.csv" />
+      <span id="lote-fname">Elegir archivo .xlsx / .csv</span>
+    </label>
+    <div class="lote__cols" id="lote-cols" hidden>
+      <label>Dirección <select id="lote-col"></select></label>
+      <label>Municipio <select id="lote-muni"></select></label>
+    </div>
+    <div class="trip__actions">
+      <button type="button" id="lote-go" disabled>Geocodificar</button>
+      <button type="button" id="lote-dl" disabled>Descargar .xlsx</button>
+    </div>
+    <div class="lote__progress"><div id="lote-bar"></div></div>
+    <p class="trip__total mono" id="lote-status"></p>
+    <div class="seg" id="lote-views" role="tablist" aria-label="Vista del lote" hidden>
+      <button type="button" class="seg__btn seg__btn--on" data-view="points">Puntos</button>
+      <button type="button" class="seg__btn" data-view="clusters">Grupos</button>
+      <button type="button" class="seg__btn" data-view="heat">Calor</button>
+      <button type="button" class="seg__btn" data-view="zone">Zonas</button>
+      <button type="button" class="seg__btn" data-view="coverage">Cobertura</button>
+    </div>
+    <div class="db" id="lote-db" hidden>
+      <div class="seg seg--sub" id="db-mode" role="tablist" aria-label="Tipo de agrupación">
+        <button type="button" class="seg__btn seg__btn--on" data-mode="visual">Visual (por zoom)</button>
+        <button type="button" class="seg__btn" data-mode="analysis">Análisis (DBSCAN)</button>
+      </div>
+      <div class="db__params" id="db-params" hidden>
+        <label>Radio <input type="range" id="db-radius" min="100" max="5000" step="100" value="500" /> <span class="mono" id="db-radius-v">500 m</span></label>
+        <label>Mínimo de filas <input type="range" id="db-min" min="2" max="50" step="1" value="5" /> <span class="mono" id="db-min-v">5</span></label>
+        <p class="zone__sum mono" id="db-sum"></p>
+        <ol class="zone__table" id="db-table"></ol>
+      </div>
+    </div>
+    <ul class="lote__legend" id="lote-legend" hidden></ul>
+    <div class="zone" id="lote-zone" hidden>
+      <div class="seg seg--sub" id="zone-level" role="tablist" aria-label="Nivel">
+        <button type="button" class="seg__btn" data-level="provincia">Provincia</button>
+        <button type="button" class="seg__btn seg__btn--on" data-level="municipio">Municipio</button>
+        <button type="button" class="seg__btn" data-level="barrio">Barrio</button>
+      </div>
+      <ul class="lote__legend zone__legend" id="zone-legend"></ul>
+      <p class="zone__sum mono" id="zone-sum"></p>
+      <ol class="zone__table" id="zone-table"></ol>
+      <div class="trip__actions"><button type="button" id="zone-dl">Descargar tabla .xlsx</button></div>
+    </div>
+    <div class="cov" id="lote-cov" hidden>
+      <p class="trip__lead">Haz clic en el mapa para poner centros (hasta 8): almacenes, clínicas, subestaciones. Cada fila se asigna al que alcanza antes en coche.</p>
+      <ol class="cov__centers" id="cov-centers"></ol>
+      <div class="seg seg--sub" id="cov-threshold" role="tablist" aria-label="Umbral">
+        <button type="button" class="seg__btn" data-min="10">10 min</button>
+        <button type="button" class="seg__btn seg__btn--on" data-min="15">15 min</button>
+        <button type="button" class="seg__btn" data-min="30">30 min</button>
+      </div>
+      <div class="trip__actions">
+        <button type="button" id="cov-go" disabled>Calcular</button>
+        <button type="button" id="cov-clear">Quitar centros</button>
+      </div>
+      <p class="zone__sum mono" id="cov-status"></p>
+      <p class="cov__sum" id="cov-sum"></p>
+      <ol class="zone__table" id="cov-table"></ol>
+    </div>
+    <details class="lote__miss" id="lote-miss" hidden></details>
+  </section>
+
+  <p class="hint" id="click-hint">O haz clic en el mapa para saber qué hay ahí.</p>
+  <p class="empty" id="empty" hidden>No encontramos ese lugar. Prueba con calles cruzadas: <em>Calle 23 e/ L y M</em>.</p>
+  <p class="apinote">API abierta · <a href="/docs">/docs</a> · <code>GET /api/v1/resolve?q=…</code></p>
+</main>
+
+<script src="/static/vendor/maplibre/maplibre-gl.js"></script>
+<script src="/static/vendor/pmtiles/pmtiles.js"></script>
+<script src="/static/app.js?v=11"></script>
+<script src="/static/iso.js?v=1"></script>
+<script src="/static/lote.js?v=5"></script>
+<script src="/static/lote-views.js?v=7"></script>
+<script src="/static/lote-coverage.js?v=2"></script>
+<script src="/static/lote-dbscan.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='hand'>
+  <node id='1' lat='23.12' lon='-82.40'/>
+  <node id='2' lat='23.12' lon='-82.39'/>
+  <node id='3' lat='23.12' lon='-82.38'/>
+  <node id='4' lat='23.11' lon='-82.40'/>
+  <node id='5' lat='23.11' lon='-82.39'/>
+  <node id='6' lat='23.11' lon='-82.38'/>
+  <node id='7' lat='23.10' lon='-82.40'/>
+  <node id='8' lat='23.10' lon='-82.39'/>
+  <node id='9' lat='23.10' lon='-82.38'/>
+  <way id='101'><nd ref='1'/><nd ref='2'/><nd ref='3'/><tag k='highway' v='residential'/><tag k='name' v='Calle 1'/></way>
+  <way id='103'><nd ref='4'/><nd ref='5'/><nd ref='6'/><tag k='highway' v='residential'/><tag k='name' v='Calle 3'/></way>
+  <way id='105'><nd ref='7'/><nd ref='8'/><nd ref='9'/><tag k='highway' v='residential'/><tag k='name' v='Calle 5'/></way>
+  <way id='201'><nd ref='1'/><nd ref='4'/><nd ref='7'/><tag k='highway' v='residential'/><tag k='name' v='A'/></way>
+  <way id='202'><nd ref='2'/><nd ref='5'/><nd ref='8'/><tag k='highway' v='residential'/><tag k='name' v='B'/></way>
+  <way id='203'><nd ref='3'/><nd ref='6'/><nd ref='9'/><tag k='highway' v='residential'/><tag k='name' v='C'/></way>
+</osm>
